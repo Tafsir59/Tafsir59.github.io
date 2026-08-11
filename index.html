@@ -1,1373 +1,724 @@
-<!-- update -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Java OOP — Learning Hub by Tafsir</title>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
-  <style>
-    :root {
-      --bg:        #0d1117;
-      --surface:   #161b22;
-      --surface2:  #1c2330;
-      --border:    #30363d;
-      --accent:    #f78166;
-      --accent2:   #58a6ff;
-      --accent3:   #3fb950;
-      --text:      #e6edf3;
-      --muted:     #8b949e;
-      --pill-bg:   #21262d;
-      --tag-yt:    #ff4e45;
-      --tag-gfg:   #2f8d46;
-      --radius:    10px;
-      --font-mono: 'JetBrains Mono', monospace;
-      --font-sans: 'Inter', sans-serif;
-    }
-
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: var(--font-sans);
-      line-height: 1.6;
-      min-height: 100vh;
-    }
-
-    /* ── HEADER ── */
-    header {
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      padding: 0 2rem;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 60px;
-    }
-
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: .6rem;
-      font-family: var(--font-mono);
-      font-size: .95rem;
-      font-weight: 700;
-      color: var(--text);
-      text-decoration: none;
-    }
-
-    .logo-icon {
-      width: 28px; height: 28px;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      border-radius: 6px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: .75rem; font-weight: 700; color: #fff;
-    }
-
-    nav { display: flex; gap: 1.5rem; }
-    nav a {
-      color: var(--muted);
-      text-decoration: none;
-      font-size: .875rem;
-      font-weight: 500;
-      transition: color .2s;
-    }
-    nav a:hover { color: var(--text); }
-
-    /* ── HERO ── */
-    .hero {
-      padding: 5rem 2rem 3.5rem;
-      max-width: 900px;
-      margin: 0 auto;
-      text-align: center;
-      position: relative;
-    }
-
-    .hero::before {
-      content: '';
-      position: absolute;
-      top: -60px; left: 50%;
-      transform: translateX(-50%);
-      width: 600px; height: 400px;
-      background: radial-gradient(ellipse at center, rgba(88,166,255,.12) 0%, rgba(247,129,102,.07) 50%, transparent 70%);
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .hero > * { position: relative; z-index: 1; }
-
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: .4rem;
-      background: rgba(247,129,102,.12);
-      border: 1px solid rgba(247,129,102,.3);
-      color: var(--accent);
-      font-family: var(--font-mono);
-      font-size: .75rem;
-      font-weight: 600;
-      padding: .3rem .8rem;
-      border-radius: 999px;
-      margin-bottom: 1.2rem;
-      letter-spacing: .04em;
-    }
-
-    .hero h1 {
-      font-size: clamp(2rem, 5vw, 3.2rem);
-      font-weight: 700;
-      line-height: 1.15;
-      letter-spacing: -.02em;
-      background: linear-gradient(135deg, #e6edf3 30%, var(--accent2));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: .8rem;
-    }
-
-    .hero p {
-      color: var(--muted);
-      font-size: 1.05rem;
-      max-width: 560px;
-      margin: 0 auto 2rem;
-    }
-
-    .hero-stats {
-      display: flex;
-      justify-content: center;
-      gap: 2.5rem;
-      flex-wrap: wrap;
-    }
-
-    .stat { text-align: center; }
-    .stat .num {
-      font-family: var(--font-mono);
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--accent);
-    }
-    .stat .lbl {
-      font-size: .75rem;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: .06em;
-      margin-top: .1rem;
-    }
-
-    /* ── MAIN LAYOUT ── */
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 1.5rem 4rem;
-      display: grid;
-      grid-template-columns: 270px 1fr;
-      gap: 2rem;
-    }
-
-    /* ── SIDEBAR ── */
-    .sidebar {
-      position: sticky;
-      top: 76px;
-      height: calc(100vh - 100px);
-      overflow-y: auto;
-      scrollbar-width: thin;
-      scrollbar-color: var(--border) transparent;
-    }
-
-    .sidebar::-webkit-scrollbar { width: 4px; }
-    .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
-
-    .sidebar-header {
-      font-family: var(--font-mono);
-      font-size: .7rem;
-      font-weight: 600;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: .1em;
-      padding: .5rem 0 .8rem;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: .8rem;
-    }
-
-    .module-group { margin-bottom: 1.4rem; }
-
-    .module-title {
-      font-size: .7rem;
-      font-weight: 600;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: .08em;
-      padding: .4rem .6rem;
-      display: flex;
-      align-items: center;
-      gap: .4rem;
-    }
-
-    .module-title .dot {
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-
-    .nav-item {
-      display: flex;
-      align-items: center;
-      gap: .6rem;
-      padding: .42rem .8rem;
-      border-radius: 6px;
-      cursor: pointer;
-      color: var(--muted);
-      font-size: .83rem;
-      text-decoration: none;
-      transition: all .18s;
-      margin-bottom: .1rem;
-    }
-
-    .nav-item:hover, .nav-item.active {
-      background: var(--surface2);
-      color: var(--text);
-    }
-
-    .nav-item.active { color: var(--accent2); }
-
-    .nav-item .icon { font-size: .9rem; flex-shrink: 0; }
-
-    /* ── CONTENT ── */
-    .content { min-width: 0; }
-
-    /* Progress bar */
-    .progress-bar-wrap {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 1rem 1.2rem;
-      margin-bottom: 2rem;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    .progress-track {
-      flex: 1;
-      height: 6px;
-      background: var(--pill-bg);
-      border-radius: 999px;
-      overflow: hidden;
-    }
-
-    .progress-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--accent3), var(--accent2));
-      border-radius: 999px;
-      transition: width .4s ease;
-      width: 0%;
-    }
-
-    .progress-label {
-      font-family: var(--font-mono);
-      font-size: .75rem;
-      color: var(--muted);
-      white-space: nowrap;
-    }
-
-    /* ── SECTION CARD ── */
-    .section-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      margin-bottom: 1.6rem;
-      overflow: hidden;
-      scroll-margin-top: 80px;
-      transition: border-color .2s;
-    }
-
-    .section-card:hover { border-color: #444c56; box-shadow: 0 0 0 1px rgba(88,166,255,.08), 0 4px 20px rgba(0,0,0,.3); }
-
-    .section-card.active-section { border-color: var(--accent2); box-shadow: 0 0 0 1px rgba(88,166,255,.15), 0 0 20px rgba(88,166,255,.06); }
-
-    .section-head {
-      padding: 1.1rem 1.4rem;
-      display: flex;
-      align-items: flex-start;
-      gap: .9rem;
-      cursor: pointer;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .section-num {
-      font-family: var(--font-mono);
-      font-size: .7rem;
-      font-weight: 700;
-      color: var(--bg);
-      background: var(--accent2);
-      border-radius: 5px;
-      padding: .2rem .45rem;
-      flex-shrink: 0;
-      margin-top: .1rem;
-    }
-
-    .section-info { flex: 1; min-width: 0; }
-
-    .section-info h2 {
-      font-size: 1.05rem;
-      font-weight: 600;
-      color: var(--text);
-      margin-bottom: .2rem;
-    }
-
-    .section-info p {
-      font-size: .82rem;
-      color: var(--muted);
-      line-height: 1.4;
-    }
-
-    .section-toggle {
-      color: var(--muted);
-      font-size: 1rem;
-      flex-shrink: 0;
-      transition: transform .25s;
-    }
-
-    .section-toggle.open { transform: rotate(90deg); }
-
-    .section-body {
-      display: none;
-      padding: 1.2rem 1.4rem;
-    }
-
-    .section-body.show { display: block; }
-
-    /* YouTube thumbnail card */
-    .video-wrap {
-      margin-bottom: 1.1rem;
-      border-radius: 10px;
-      overflow: hidden;
-    }
-
-    .yt-card {
-      display: block;
-      position: relative;
-      border-radius: 10px;
-      overflow: hidden;
-      text-decoration: none;
-      background: #000;
-      aspect-ratio: 16/9;
-    }
-
-    .yt-card img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      transition: transform .35s ease, filter .35s ease;
-      filter: brightness(.85);
-    }
-
-    .yt-card:hover img {
-      transform: scale(1.03);
-      filter: brightness(.6);
-    }
-
-    .yt-overlay {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: .7rem;
-      background: linear-gradient(to top, rgba(0,0,0,.7) 0%, transparent 60%);
-      transition: background .3s;
-    }
-
-    .yt-card:hover .yt-overlay {
-      background: rgba(0,0,0,.45);
-    }
-
-    .yt-play-btn {
-      filter: drop-shadow(0 2px 12px rgba(0,0,0,.6));
-      transform: scale(1);
-      transition: transform .25s;
-    }
-
-    .yt-card:hover .yt-play-btn {
-      transform: scale(1.15);
-    }
-
-    .yt-label {
-      color: #fff;
-      font-size: .82rem;
-      font-weight: 600;
-      letter-spacing: .04em;
-      text-shadow: 0 1px 4px rgba(0,0,0,.8);
-      background: rgba(0,0,0,.5);
-      padding: .3rem .8rem;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.15);
-    }
-
-    /* Tags row */
-    .tags-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: .5rem;
-      margin-bottom: 1rem;
-    }
-
-    .tag {
-      display: inline-flex;
-      align-items: center;
-      gap: .3rem;
-      padding: .25rem .7rem;
-      border-radius: 999px;
-      font-size: .73rem;
-      font-weight: 600;
-      text-decoration: none;
-      transition: opacity .2s;
-    }
-
-    .tag:hover { opacity: .8; text-decoration: none; }
-    .tag-yt { background: rgba(255,78,69,.15); color: var(--tag-yt); border: 1px solid rgba(255,78,69,.3); }
-    .tag-gfg { background: rgba(47,141,70,.15); color: var(--tag-gfg); border: 1px solid rgba(47,141,70,.3); }
-    .tag-level { background: var(--pill-bg); color: var(--muted); border: 1px solid var(--border); }
-
-    /* Key points */
-    .key-points {
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: .9rem 1rem;
-      margin-top: .6rem;
-    }
-
-    .key-points h4 {
-      font-family: var(--font-mono);
-      font-size: .72rem;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: .08em;
-      margin-bottom: .6rem;
-    }
-
-    .key-points ul {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: .35rem;
-    }
-
-    .key-points li {
-      font-size: .83rem;
-      color: var(--muted);
-      padding-left: 1.1rem;
-      position: relative;
-    }
-
-    .key-points li::before {
-      content: '▸';
-      position: absolute;
-      left: 0;
-      color: var(--accent2);
-      font-size: .65rem;
-      top: .15rem;
-    }
-
-    /* Module divider */
-    .module-divider {
-      display: flex;
-      align-items: center;
-      gap: .8rem;
-      margin: 2rem 0 1rem;
-    }
-
-    .module-divider .label {
-      display: flex;
-      align-items: center;
-      gap: .5rem;
-      font-family: var(--font-mono);
-      font-size: .75rem;
-      font-weight: 700;
-      color: var(--text);
-      white-space: nowrap;
-    }
-
-    .module-divider .dot-big {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-    }
-
-    .module-divider .line {
-      flex: 1;
-      height: 1px;
-      background: var(--border);
-    }
-
-    /* ── FOOTER ── */
-    footer {
-      border-top: 1px solid var(--border);
-      text-align: center;
-      padding: 2.5rem 2rem;
-      color: var(--muted);
-      font-size: .8rem;
-      background: var(--surface);
-    }
-
-    footer a { color: var(--accent2); text-decoration: none; }
-
-    /* RESPONSIVE */
-    @media (max-width: 768px) {
-      .container { grid-template-columns: 1fr; }
-      .sidebar { position: static; height: auto; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tafsir Khan — ICT Student &amp; Developer</title>
+<meta name="description" content="Portfolio of Tafsir Khan, ICT student and developer.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg: #0A0E17;
+    --bg-2: #0D1220;
+    --panel: #131826;
+    --panel-raised: #171E30;
+    --ink: #EAEDF4;
+    --ink-soft: #B7BECC;
+    --muted: #7B8496;
+    --accent: #E8A33D;
+    --accent-glow: rgba(232, 163, 61, 0.35);
+    --accent-2: #5AC8FA;
+    --line: #232B3D;
+    --line-strong: #2E3750;
+    --max-w: 880px;
+    --serif: 'Lora', Georgia, serif;
+    --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --mono: 'IBM Plex Mono', 'SFMono-Regular', Consolas, monospace;
+  }
+
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior: auto; }
+    *{ animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+  }
+
+  body{
+    margin:0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a{ color: inherit; }
+  a:focus-visible, button:focus-visible{
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  .wrap{
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding: 0 28px;
+  }
+
+  /* ---------- Nav ---------- */
+  .nav{
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(10,14,23,0.85);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-inner{
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding: 16px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .nav-mark{
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 0.02em;
+    color: var(--ink);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .nav-mark span{ color: var(--accent); }
+  .nav-links{
+    display: flex;
+    gap: 28px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .nav-links a{
+    position: relative;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    color: var(--muted);
+    transition: color 0.2s ease;
+    padding-bottom: 3px;
+  }
+  .nav-links a::after{
+    content: "";
+    position: absolute;
+    left: 0; bottom: 0;
+    width: 0%;
+    height: 1px;
+    background: var(--accent);
+    transition: width 0.25s ease;
+  }
+  .nav-links a:hover{ color: var(--accent); }
+  .nav-links a:hover::after{ width: 100%; }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    position: relative;
+    padding: 100px 0 76px;
+    border-bottom: 1px solid var(--line);
+    overflow: hidden;
+  }
+  .hero::before, .hero::after{
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px);
+    z-index: 0;
+    pointer-events: none;
+  }
+  .hero::before{
+    width: 420px; height: 420px;
+    background: var(--accent-glow);
+    top: -180px; right: -120px;
+    animation: drift1 16s ease-in-out infinite alternate;
+  }
+  .hero::after{
+    width: 320px; height: 320px;
+    background: rgba(90, 200, 250, 0.16);
+    bottom: -160px; left: -100px;
+    animation: drift2 18s ease-in-out infinite alternate;
+  }
+  @keyframes drift1{
+    from{ transform: translate(0,0); }
+    to{ transform: translate(-40px, 30px); }
+  }
+  @keyframes drift2{
+    from{ transform: translate(0,0); }
+    to{ transform: translate(30px, -20px); }
+  }
+  .hero > .wrap{ position: relative; z-index: 1; }
+  .hero-eyebrow{
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--accent);
+    letter-spacing: 0.06em;
+    margin: 0 0 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .hero-eyebrow::before{
+    content: "";
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 0 var(--accent-glow);
+    display: inline-block;
+    animation: pulse 2.2s ease-in-out infinite;
+  }
+  @keyframes pulse{
+    0%{ box-shadow: 0 0 0 0 var(--accent-glow); }
+    70%{ box-shadow: 0 0 0 8px rgba(232,163,61,0); }
+    100%{ box-shadow: 0 0 0 0 rgba(232,163,61,0); }
+  }
+  .hero h1{
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: clamp(2.4rem, 5vw, 3.6rem);
+    line-height: 1.1;
+    margin: 0 0 20px;
+    letter-spacing: -0.01em;
+    background: linear-gradient(120deg, #FFFFFF 40%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .hero p.lede{
+    font-size: 1.15rem;
+    color: var(--ink-soft);
+    max-width: 58ch;
+    margin: 0 0 32px;
+  }
+  .hero-actions{
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .btn{
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 22px;
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 0.03em;
+    text-decoration: none;
+    border-radius: 3px;
+    border: 1px solid var(--line-strong);
+    transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+  .btn-primary{
+    background: var(--accent);
+    color: #17130A;
+    border-color: var(--accent);
+    font-weight: 500;
+  }
+  .btn-primary:hover{ box-shadow: 0 0 24px var(--accent-glow); transform: translateY(-2px); }
+  .btn-ghost{
+    background: transparent;
+    color: var(--ink);
+  }
+  .btn-ghost:hover{ border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+
+  /* ---------- Section framing ---------- */
+  section{ padding: 72px 0; border-bottom: 1px solid var(--line); }
+  section:last-of-type{ border-bottom: none; }
+  .section-head{
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 40px;
+    gap: 16px;
+  }
+  .section-num{
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+  }
+  .section-head h2{
+    font-family: var(--serif);
+    font-size: 1.7rem;
+    font-weight: 600;
+    margin: 4px 0 0;
+    color: var(--ink);
+  }
+
+  .reveal{
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal.is-visible{
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ---------- About ---------- */
+  .about-grid{
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 48px;
+  }
+  .about-body p{ color: var(--ink-soft); margin: 0 0 16px; }
+  .about-body p:last-child{ margin-bottom: 0; }
+
+  .fact-list{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--line);
+  }
+  .fact-list li{
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 14px;
+  }
+  .fact-list dt{
+    font-family: var(--mono);
+    color: var(--muted);
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 11.5px;
+    letter-spacing: 0.06em;
+  }
+  .fact-list dd{ margin: 0; text-align: right; color: var(--ink); }
+
+  /* ---------- Skills ---------- */
+  .skills-table{
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .skills-table tr{ border-bottom: 1px solid var(--line); }
+  .skills-table tr:first-child{ border-top: 1px solid var(--line); }
+  .skills-table tr:hover td{ background: var(--panel); }
+  .skills-table td{
+    padding: 16px 12px 16px 0;
+    vertical-align: top;
+    transition: background 0.2s ease;
+  }
+  .skills-table td.cat{
+    width: 190px;
+    font-family: var(--mono);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--accent);
+    padding-left: 0;
+  }
+  .skills-table td.items{
+    color: var(--ink-soft);
+    font-size: 14.5px;
+  }
+
+  /* ---------- Projects ---------- */
+  .project{
+    padding: 30px 24px;
+    margin: 0 -24px 6px;
+    border-radius: 8px;
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 24px;
+    transition: background 0.25s ease, box-shadow 0.25s ease;
+  }
+  .project:hover{
+    background: var(--panel);
+    box-shadow: 0 0 0 1px var(--line-strong), 0 12px 28px rgba(0,0,0,0.35);
+  }
+  .project-year{
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--muted);
+    padding-top: 2px;
+  }
+  .project h3{
+    font-family: var(--serif);
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0 0 8px;
+    color: var(--ink);
+  }
+  .project h3 a{
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+  }
+  .project h3 a:hover{ border-bottom-color: var(--accent); color: var(--accent); }
+  .project p{
+    color: var(--ink-soft);
+    margin: 0 0 14px;
+    font-size: 14.5px;
+    max-width: 60ch;
+  }
+  .project-tags{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .project-tags span{
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.03em;
+    color: var(--accent);
+    background: rgba(232, 163, 61, 0.12);
+    border: 1px solid rgba(232, 163, 61, 0.3);
+    padding: 3px 9px;
+    border-radius: 3px;
+  }
+  .project-links{
+    margin-top: 12px;
+    display: flex;
+    gap: 16px;
+  }
+  .project-links a{
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-soft);
+    text-decoration: none;
+    border-bottom: 1px solid var(--line-strong);
+  }
+  .project-links a:hover{ color: var(--accent-2); border-color: var(--accent-2); }
+
+  /* ---------- Education: circuit-log signature ---------- */
+  .log{
+    border-left: 2px solid var(--line);
+    margin-left: 6px;
+  }
+  .log-entry{
+    position: relative;
+    padding: 4px 0 32px 30px;
+  }
+  .log-entry:last-child{ padding-bottom: 0; }
+  .log-entry::before{
+    content: "";
+    position: absolute;
+    left: -7px;
+    top: 6px;
+    width: 12px;
+    height: 12px;
+    background: var(--bg);
+    border: 2px solid var(--accent);
+    border-radius: 50%;
+  }
+  .log-entry.current::before{
+    box-shadow: 0 0 0 0 var(--accent-glow);
+    animation: pulse 2.2s ease-in-out infinite;
+  }
+  .log-hash{
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    margin-right: 10px;
+  }
+  .log-date{
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .log-entry h3{
+    font-family: var(--serif);
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin: 8px 0 4px;
+    color: var(--ink);
+  }
+  .log-role{
+    font-size: 13.5px;
+    color: var(--muted);
+    margin: 0 0 10px;
+  }
+  .log-entry ul{
+    margin: 0;
+    padding-left: 18px;
+    color: var(--ink-soft);
+    font-size: 14.5px;
+  }
+  .log-entry li{ margin-bottom: 4px; }
+
+  /* ---------- Contact ---------- */
+  .contact-inner{
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .contact-copy h2{
+    font-family: var(--serif);
+    font-size: 2rem;
+    margin: 0 0 12px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .contact-copy p{
+    color: var(--ink-soft);
+    max-width: 46ch;
+    margin: 0;
+  }
+  .contact-links{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    text-align: right;
+  }
+  .contact-links li{ margin-bottom: 10px; }
+  .contact-links a{
+    font-family: var(--mono);
+    font-size: 14px;
+    text-decoration: none;
+    color: var(--ink);
+    border-bottom: 1px solid var(--line-strong);
+    padding-bottom: 1px;
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+  .contact-links a:hover{ color: var(--accent); border-color: var(--accent); }
+
+  footer{
+    padding: 28px 0 48px;
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 720px){
+    .nav-links{ display: none; }
+    .about-grid{ grid-template-columns: 1fr; }
+    .project{ grid-template-columns: 1fr; margin: 0 -12px 6px; padding: 24px 12px; }
+    .project-year{ padding-top: 0; }
+    .contact-inner{ flex-direction: column; align-items: flex-start; }
+    .contact-links{ text-align: left; }
+    .skills-table td.cat{ width: 120px; }
+  }
+</style>
 </head>
 <body>
 
-<!-- HEADER -->
-<header>
-  <a class="logo" href="#">
-    <div class="logo-icon">☕</div>
-    Java OOP Hub
-  </a>
-  <nav>
-    <a href="#module-foundations">Foundations</a>
-    <a href="#module-pillars">4 Pillars</a>
-    <a href="#module-advanced">Advanced</a>
-  </nav>
-  <div style="font-family:var(--font-mono);font-size:.72rem;color:var(--muted);background:var(--pill-bg);border:1px solid var(--border);padding:.25rem .65rem;border-radius:999px;">IT-24059</div>
-</header>
-
-<!-- HERO -->
-<div class="hero">
-  <div class="hero-badge">☕ Java OOP — Complete Learning Guide</div>
-  <h1>Master Object-Oriented<br>Programming in Java</h1>
-  <p>Every OOP topic — with embedded video tutorials, GeeksForGeeks references, and key takeaways — all in one place.</p>
-  <div class="hero-stats">
-    <div class="stat"><div class="num">20</div><div class="lbl">Videos</div></div>
-    <div class="stat"><div class="num">3</div><div class="lbl">Modules</div></div>
-    <div class="stat"><div class="num">15</div><div class="lbl">Topics</div></div>
-    <div class="stat"><div class="num">Free</div><div class="lbl">All Resources</div></div>
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nav-mark" href="#top">TK<span>.</span>DEV</a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#projects">Work</a></li>
+      <li><a href="#education">Education</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
   </div>
-  <div style="margin-top:2rem;display:inline-flex;align-items:center;gap:.6rem;background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:.45rem 1rem .45rem .55rem;">
-    <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;color:#fff;">T</div>
-    <span style="font-size:.8rem;color:var(--muted);">Made by</span>
-    <span style="font-family:var(--font-mono);font-size:.82rem;font-weight:600;color:var(--text);">Tafsir</span>
-    <span style="background:var(--pill-bg);border:1px solid var(--border);border-radius:999px;padding:.1rem .5rem;font-family:var(--font-mono);font-size:.7rem;color:var(--muted);">IT-24059</span>
+</nav>
+
+<div id="top" class="hero">
+  <div class="wrap">
+    <p class="hero-eyebrow">Open to internships &amp; junior roles</p>
+    <h1>Tafsir Khan — ICT student building practical software, one project at a time.</h1>
+    <p class="lede">I'm a 2nd-year ICT student who enjoys turning coursework into working software — from console applications in C to data-driven scripts in Python. Currently deepening my skills in operating systems, microprocessors, and Java.</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="#projects">View my projects</a>
+      <a class="btn btn-ghost" href="mailto:it24059@mbstu.ac.bd">Get in touch</a>
+    </div>
   </div>
 </div>
 
-<!-- MAIN -->
-<div class="container">
-
-  <!-- SIDEBAR -->
-  <aside class="sidebar">
-    <div class="sidebar-header">📚 Course Outline</div>
-
-    <div class="module-group">
-      <div class="module-title"><span class="dot" style="background:#f78166"></span>Module 1 — Foundations</div>
-      <a class="nav-item" href="#s-objects" onclick="openSection('s-objects')"><span class="icon">📦</span> Objects &amp; Classes</a>
-      <a class="nav-item" href="#s-constructors" onclick="openSection('s-constructors')"><span class="icon">🏗️</span> Constructors</a>
-      <a class="nav-item" href="#s-scope" onclick="openSection('s-scope')"><span class="icon">🔭</span> Variable Scope</a>
-      <a class="nav-item" href="#s-overloaded-constructors" onclick="openSection('s-overloaded-constructors')"><span class="icon">⚙️</span> Overloaded Constructors</a>
-      <a class="nav-item" href="#s-tostring" onclick="openSection('s-tostring')"><span class="icon">📝</span> toString Method</a>
-      <a class="nav-item" href="#s-array-objects" onclick="openSection('s-array-objects')"><span class="icon">🗃️</span> Array of Objects</a>
-      <a class="nav-item" href="#s-static" onclick="openSection('s-static')"><span class="icon">⚡</span> Static Keyword</a>
-    </div>
-
-    <div class="module-group">
-      <div class="module-title"><span class="dot" style="background:#58a6ff"></span>Module 2 — 4 Pillars of OOP</div>
-      <a class="nav-item" href="#s-inheritance" onclick="openSection('s-inheritance')"><span class="icon">👨‍👩‍👦</span> Inheritance</a>
-      <a class="nav-item" href="#s-overriding" onclick="openSection('s-overriding')"><span class="icon">🔄</span> Method Overriding</a>
-      <a class="nav-item" href="#s-super" onclick="openSection('s-super')"><span class="icon">🦸</span> super Keyword</a>
-      <a class="nav-item" href="#s-abstraction" onclick="openSection('s-abstraction')"><span class="icon">🧩</span> Abstraction</a>
-      <a class="nav-item" href="#s-access" onclick="openSection('s-access')"><span class="icon">🔒</span> Access Modifiers</a>
-      <a class="nav-item" href="#s-encapsulation" onclick="openSection('s-encapsulation')"><span class="icon">🛡️</span> Encapsulation</a>
-    </div>
-
-    <div class="module-group">
-      <div class="module-title"><span class="dot" style="background:#3fb950"></span>Module 3 — Advanced OOP</div>
-      <a class="nav-item" href="#s-copy" onclick="openSection('s-copy')"><span class="icon">📋</span> Copy Objects</a>
-      <a class="nav-item" href="#s-interface" onclick="openSection('s-interface')"><span class="icon">🔌</span> Interfaces</a>
-      <a class="nav-item" href="#s-polymorphism" onclick="openSection('s-polymorphism')"><span class="icon">🎭</span> Polymorphism</a>
-      <a class="nav-item" href="#s-dynamic" onclick="openSection('s-dynamic')"><span class="icon">✨</span> Dynamic Polymorphism</a>
-    </div>
-  </aside>
-
-  <!-- CONTENT -->
-  <main class="content">
-
-    <!-- Progress -->
-    <div class="progress-bar-wrap">
-      <span style="font-size:.8rem;color:var(--muted);white-space:nowrap">Your Progress</span>
-      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
-      <span class="progress-label" id="progressLabel">0 / 15 topics</span>
-    </div>
-
-    <!-- ═══════════════════════════════════════ -->
-    <!-- MODULE 1 — FOUNDATIONS -->
-    <!-- ═══════════════════════════════════════ -->
-    <div class="module-divider" id="module-foundations">
-      <div class="label"><span class="dot-big" style="background:#f78166;border-radius:50%"></span>Module 1 — Foundations</div>
-      <div class="line"></div>
-    </div>
-
-    <!-- Objects & Classes -->
-    <div class="section-card" id="s-objects">
-      <div class="section-head" onclick="toggleSection('s-objects')">
-        <div class="section-num">01</div>
-        <div class="section-info">
-          <h2>📦 Objects &amp; Classes (OOP)</h2>
-          <p>Understand what objects and classes are — the blueprint and the instance.</p>
-        </div>
-        <span class="section-toggle" id="toggle-s-objects">▶</span>
+<section id="about" class="reveal">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <span class="section-num">01</span>
+        <h2>About</h2>
       </div>
-      <div class="section-body" id="body-s-objects">
-        <div class="tags-row">
-          <a class="tag tag-yt" href="https://www.youtube.com/watch?v=xk4_1vDrzzo&t=10284" target="_blank">▶ Bro Code Video</a>
-          <a class="tag tag-gfg" href="https://www.geeksforgeeks.org/classes-objects-java/" target="_blank">📗 GeeksForGeeks</a>
-          <span class="tag tag-level">🟢 Beginner</span>
-        </div>
-        <div class="video-wrap">
-          <a class="yt-card" href="https://www.youtube.com/watch?v=xk4_1vDrzzo&t=10284" target="_blank" rel="noopener">
-            <img src="https://img.youtube.com/vi/xk4_1vDrzzo/hqdefault.jpg" alt="Java Objects OOP - Bro Code" onerror="this.src='https://img.youtube.com/vi/xk4_1vDrzzo/mqdefault.jpg'"/>
-            <div class="yt-overlay">
-              <div class="yt-play-btn">
-                <svg viewBox="0 0 68 48" width="60" height="42"><path d="M66.5 7.7a8.5 8.5 0 0 0-6-6C56.1 0 34 0 34 0S11.9 0 7.5 1.7a8.5 8.5 0 0 0-6 6C0 12.1 0 24 0 24s0 11.9 1.5 16.3a8.5 8.5 0 0 0 6 6C11.9 48 34 48 34 48s22.1 0 26.5-1.7a8.5 8.5 0 0 0 6-6C68 35.9 68 24 68 24s0-11.9-1.5-16.3z" fill="#ff0000"/><path d="M45 24 27 14v20" fill="#fff"/></svg>
-              </div>
-              <div class="yt-label">Watch on YouTube ↗</div>
-            </div>
-          </a>
-        </div>
-        <div class="key-points">
-          <h4>🔑 Key Concepts</h4>
-          <ul>
-            <li>A <strong>class</strong> is a blueprint/template that defines properties (fields) and behaviors (methods)</li>
-            <li>An <strong>object</strong> is an instance of a class created using the <code>new</code> keyword</li>
-            <li>Fields store state; methods define behavior</li>
-            <li>Multiple objects can be created from a single class</li>
-          </ul>
+    </div>
+    <div class="about-grid">
+      <div class="about-body">
+        <p>I'm currently in my 2nd year, 2nd semester of an ICT program, building a foundation across programming, data structures, algorithms, and electronics. I like taking what I learn in class and turning it into small working tools — a habit that's produced everything from an ATM simulator to a PDF summarizer.</p>
+        <p>My core languages are C, C++, Java, and Python, and I'm comfortable using Python's data-analysis stack (pandas, NumPy, matplotlib, seaborn) for coursework and side projects. I'm also getting hands-on with Java web technologies like JDBC, Servlets, and JSP.</p>
+      </div>
+      <dl class="fact-list">
+        <li><dt>Studying</dt><dd>ICT, 2nd Year, 2nd Semester</dd></li>
+        <li><dt>Focus</dt><dd>Programming &amp; data-driven tools</dd></li>
+        <li><dt>Open to</dt><dd>Internships, junior roles</dd></li>
+        <li><dt>Based in</dt><dd>Bangladesh</dd></li>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<section id="skills" class="reveal">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <span class="section-num">02</span>
+        <h2>Skills</h2>
+      </div>
+    </div>
+    <table class="skills-table">
+      <tr>
+        <td class="cat">Languages</td>
+        <td class="items">C, C++, Java, Python</td>
+      </tr>
+      <tr>
+        <td class="cat">Python stack</td>
+        <td class="items">pandas, NumPy, matplotlib, seaborn</td>
+      </tr>
+      <tr>
+        <td class="cat">Java &amp; web</td>
+        <td class="items">JDBC, Servlets, JSP</td>
+      </tr>
+      <tr>
+        <td class="cat">Coursework</td>
+        <td class="items">Data Structures, Algorithms, Digital Logic Design, Computer Organization and Architecture, Operating Systems, Microprocessors, Statistics</td>
+      </tr>
+    </table>
+  </div>
+</section>
+
+<section id="projects" class="reveal">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <span class="section-num">03</span>
+        <h2>Selected work</h2>
+      </div>
+    </div>
+
+    <div class="project">
+      <div class="project-year">2026</div>
+      <div>
+        <h3><a href="#">PDF Summarizer</a></h3>
+        <p>A Java application that reads PDF documents and generates condensed summaries of their content, built to make studying long lecture notes and papers faster.</p>
+        <div class="project-tags"><span>Java</span></div>
+        <div class="project-links">
+          <a href="https://github.com/Tafsir59" target="_blank" rel="noopener">View source</a>
         </div>
       </div>
     </div>
 
-    <!-- Constructors -->
-    <div class="section-card" id="s-constructors">
-      <div class="section-head" onclick="toggleSection('s-constructors')">
-        <div class="section-num">02</div>
-        <div class="section-info">
-          <h2>🏗️ Constructors</h2>
-          <p>Special methods that initialize objects when they're created.</p>
-        </div>
-        <span class="section-toggle" id="toggle-s-constructors">▶</span>
-      </div>
-      <div class="section-body" id="body-s-constructors">
-        <div class="tags-row">
-          <a class="tag tag-yt" href="https://www.youtube.com/watch?v=xk4_1vDrzzo&t=10896" target="_blank">▶ Bro Code Video</a>
-          <a class="tag tag-gfg" href="https://www.geeksforgeeks.org/constructors-in-java/" target="_blank">📗 GeeksForGeeks</a>
-          <span class="tag tag-level">🟢 Beginner</span>
-        </div>
-        <div class="video-wrap">
-          <a class="yt-card" href="https://www.youtube.com/watch?v=xk4_1vDrzzo&t=10896" target="_blank" rel="noopener">
-            <img src="https://img.youtube.com/vi/xk4_1vDrzzo/hqdefault.jpg" alt="Java Constructors - Bro Code" onerror="this.src='https://img.youtube.com/vi/xk4_1vDrzzo/mqdefault.jpg'"/>
-            <div class="yt-overlay">
-              <div class="yt-play-btn">
-                <svg viewBox="0 0 68 48" width="60" height="42"><path d="M66.5 7.7a8.5 8.5 0 0 0-6-6C56.1 0 34 0 34 0S11.9 0 7.5 1.7a8.5 8.5 0 0 0-6 6C0 12.1 0 24 0 24s0 11.9 1.5 16.3a8.5 8.5 0 0 0 6 6C11.9 48 34 48 34 48s22.1 0 26.5-1.7a8.5 8.5 0 0 0 6-6C68 35.9 68 24 68 24s0-11.9-1.5-16.3z" fill="#ff0000"/><path d="M45 24 27 14v20" fill="#fff"/></svg>
-              </div>
-              <div class="yt-label">Watch on YouTube ↗</div>
-            </div>
-          </a>
-        </div>
-        <div class="key-points">
-          <h4>🔑 Key Concepts</h4>
-          <ul>
-            <li>Constructor name must match the class name</li>
-            <li>No return type (not even void)</li>
-            <li>Called automatically when object is created with <code>new</code></li>
-            <li>Default constructor is provided if none is defined</li>
-          </ul>
+    <div class="project">
+      <div class="project-year">2026</div>
+      <div>
+        <h3><a href="#">ChatBot</a></h3>
+        <p>A conversational chatbot that responds to user queries in real time, built to explore natural-language interaction and response logic.</p>
+        <div class="project-tags"><span>Python</span></div>
+        <div class="project-links">
+          <a href="https://github.com/Tafsir59" target="_blank" rel="noopener">View source</a>
         </div>
       </div>
     </div>
 
-    <!-- Variable Scope -->
-    <div class="section-card" id="s-scope">
-      <div class="section-head" onclick="toggleSection('s-scope')">
-        <div class="section-num">03</div>
-        <div class="section-info">
-          <h2>🔭 Variable Scope</h2>
-          <p>Local vs instance vs class-level variables — where they live and how long.</p>
-        </div>
-        <span class="section-toggle" id="toggle-s-scope">▶</span>
-      </div>
-      <div class="section-body" id="body-s-scope">
-        <div class="tags-row">
-          <a class="tag tag-yt" href="https://www.youtube.com/watch?v=xk4_1vDrzzo&t=11496" target="_blank">▶ Bro Code Video</a>
-          <a class="tag tag-gfg" href="https://www.geeksforgeeks.org/variable-scope-in-java/" target="_blank">📗 GeeksForGeeks</a>
-          <span class="tag tag-level">🟢 Beginner</span>
-        </div>
-        <div class="video-wrap">
-          <a class="yt-card" href="https://www.youtube.com/watch?v=xk4_1vDrzzo&t=11496" target="_blank" rel="noopener">
-            <img src="https://img.youtube.com/vi/xk4_1vDrzzo/hqdefault.jpg" alt="Java Variable Scope - Bro Code" onerror="this.src='https://img.youtube.com/vi/xk4_1vDrzzo/mqdefault.jpg'"/>
-            <div class="yt-overlay">
-              <div class="yt-play-btn">
-                <svg viewBox="0 0 68 48" width="60" height="42"><path d="M66.5 7.7a8.5 8.5 0 0 0-6-6C56.1 0 34 0 34 0S11.9 0 7.5 1.7a8.5 8.5 0 0 0-6 6C0 12.1 0 24 0 24s0 11.9 1.5 16.3a8.5 8.5 0 0 0 6 6C11.9 48 34 48 34 48s22.1 0 26.5-1.7a8.5 8.5 0 0 0 6-6C68 35.9 68 24 68 24s0-11.9-1.5-16.3z" fill="#ff0000"/><path d="M45 24 27 14v20" fill="#fff"/></svg>
-              </div>
-              <div class="yt-label">Watch on YouTube ↗</div>
-            </div>
-          </a>
-        </div>
-        <div class="key-points">
-          <h4>🔑 Key Concepts</h4>
-          <ul>
-            <li><strong>Local variables</strong> — declared inside a method, only available there</li>
-            <li><strong>Instance variables</strong> — declared in a class, one per object</li>
-            <li><strong>Class/static variables</strong> — shared across all instances</li>
-            <li>Use <code>this</code> to disambiguate instance vs local variables</li>
-          </ul>
+    <div class="project">
+      <div class="project-year">2025</div>
+      <div>
+        <h3><a href="#">ATM Simulation</a></h3>
+        <p>A console-based ATM simulator supporting balance inquiry, deposits, and withdrawals, with account data persisted using simple file handling.</p>
+        <div class="project-tags"><span>C</span><span>File Handling</span></div>
+        <div class="project-links">
+          <a href="https://github.com/Tafsir59" target="_blank" rel="noopener">View source</a>
         </div>
       </div>
     </div>
+  </div>
+</section>
 
-    <!-- Overloaded Constructors -->
-    <div class="section-card" id="s-overloaded-constructors">
-      <div class="section-head" onclick="toggleSection('s-overloaded-constructors')">
-        <div class="section-num">04</div>
-        <div class="section-info">
-          <h2>⚙️ Overloaded Constructors</h2>
-          <p>Multiple constructors in one class to support different initialization paths.</p>
-        </div>
-        <span class="section-toggle" id="toggle-s-overloaded-constructors">▶</span>
-      </div>
-      <div class="section-body" id="body-s-overloaded-constructors">
-        <div class="tags-row">
-          <a class="tag tag-yt" href="https://www.youtube.com/watch?v=xk4_1vDrzzo&t=11799" target="_blank">▶ Bro Code Video</a>
-          <a class="tag tag-gfg" href="https://www.geeksforgeeks.org/constructor-overloading-java/" target="_blank">📗 GeeksForGeeks</a>
-          <span class="tag tag-level">🟡 Intermediate</span>
-        </div>
-        <div class="video-wrap">
-          <a class="yt-card" href="https://www.youtube.com/watch?v=xk4_1vDrzzo&t=11799" target="_blank" rel="noopener">
-            <img src="https://img.youtube.com/vi/xk4_1vDrzzo/hqdefault.jpg" alt="Java Overloaded Constructors - Bro Code" onerror="this.src='https://img.youtube.com/vi/xk4_1vDrzzo/mqdefault.jpg'"/>
-            <div class="yt-overlay">
-              <div class="yt-play-btn">
-                <svg viewBox="0 0 68 48" width="60" height="42"><path d="M66.5 7.7a8.5 8.5 0 0 0-6-6C56.1 0 34 0 34 0S11.9 0 7.5 1.7a8.5 8.5 0 0 0-6 6C0 12.1 0 24 0 24s0 11.9 1.5 16.3a8.5 8.5 0 0 0 6 6C11.9 48 34 48 34 48s22.1 0 26.5-1.7a8.5 8.5 0 0 0 6-6C68 35.9 68 24 68 24s0-11.9-1.5-16.3z" fill="#ff0000"/><path d="M45 24 27 14v20" fill="#fff"/></svg>
-              </div>
-              <div class="yt-label">Watch on YouTube ↗</div>
-            </div>
-          </a>
-        </div>
-        <div class="key-points">
-          <h4>🔑 Key Concepts</h4>
-          <ul>
-            <li>Same class, multiple constructors with different parameters</li>
-            <li>Java picks the matching constructor at compile time</li>
-            <li>Use <code>this()</code> to call another constructor from within a constructor</li>
-            <li>Enables flexible object creation</li>
-          </ul>
-        </div>
+<section id="education" class="reveal">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <span class="section-num">04</span>
+        <h2>Education</h2>
       </div>
     </div>
 
-    <!-- toString -->
-    <div class="section-card" id="s-tostring">
-      <div class="section-head" onclick="toggleSection('s-tostring')">
-        <div class="section-num">05</div>
-        <div class="section-info">
-          <h2>📝 toString Method</h2>
-          <p>Override <code>toString()</code> to give your objects a human-readable representation.</p>
-        </div>
-        <span class="section-toggle" id="toggle-s-tostring">▶</span>
+    <div class="log">
+      <div class="log-entry current">
+        <span class="log-hash">#2-2</span><span class="log-date">Year 2, Semester 2 — current</span>
+        <h3>B.Sc. in Information &amp; Communication Technology</h3>
+        <p class="log-role">Coursework in progress</p>
+        <ul>
+          <li>Advanced Java</li>
+          <li>Complex Variable and Fourier Analysis</li>
+          <li>Communication Engineering + Lab</li>
+          <li>Microprocessor + Lab</li>
+          <li>Operating Systems + Lab</li>
+          <li>Managerial Accounting</li>
+        </ul>
       </div>
-      <div class="section-body" id="body-s-tostring">
-        <div class="tags-row">
-          <a class="tag tag-yt" href="https://www.youtube.com/watch?v=xk4_1vDrzzo&t=12244" target="_blank">▶ Bro Code Video</a>
-          <a class="tag tag-gfg" href="https://www.geeksforgeeks.org/stringbuilder-tostring-method-in-java-with-examples/" target="_blank">📗 GeeksForGeeks</a>
-          <span class="tag tag-level">🟢 Beginner</span>
-        </div>
-        <div class="video-wrap">
-          <a class="yt-card" href="https://www.youtube.com/watch?v=xk4_1vDrzzo&t=12244" target="_blank" rel="noopener">
-            <img src="https://img.youtube.com/vi/xk4_1vDrzzo/hqdefault.jpg" alt="Java toString - Bro Code" onerror="this.src='https://img.youtube.com/vi/xk4_1vDrzzo/mqdefault.jpg'"/>
-            <div class="yt-overlay">
-              <div class="yt-play-btn">
-                <svg viewBox="0 0 68 48" width="60" height="42"><path d="M66.5 7.7a8.5 8.5 0 0 0-6-6C56.1 0 34 0 34 0S11.9 0 7.5 1.7a8.5 8.5 0 0 0-6 6C0 12.1 0 24 0 24s0 11.9 1.5 16.3a8.5 8.5 0 0 0 6 6C11.9 48 34 48 34 48s22.1 0 26.5-1.7a8.5 8.5 0 0 0 6-6C68 35.9 68 24 68 24s0-11.9-1.5-16.3z" fill="#ff0000"/><path d="M45 24 27 14v20" fill="#fff"/></svg>
-              </div>
-              <div class="yt-label">Watch on YouTube ↗</div>
-            </div>
-          </a>
-        </div>
-        <div class="key-points">
-          <h4>🔑 Key Concepts</h4>
-          <ul>
-            <li><code>toString()</code> is called automatically when you print an object</li>
-            <li>Without override, prints memory address like <code>ClassName@hashcode</code></li>
-            <li>Override it to print meaningful field values</li>
-            <li>Comes from the base <code>Object</code> class in Java</li>
-          </ul>
-        </div>
+      <div class="log-entry">
+        <span class="log-hash">#2-1</span><span class="log-date">Year 2, Semester 1</span>
+        <h3>B.Sc. in Information &amp; Communication Technology</h3>
+        <ul>
+          <li>Vector Calculus and Differential Calculus</li>
+          <li>Algorithm + Algorithm Lab</li>
+          <li>Digital Logic Design + Digital Logic Design Lab</li>
+          <li>Computer Organization and Architecture</li>
+          <li>Statistics</li>
+          <li>Numerical Method Lab</li>
+          <li>Java Lab</li>
+        </ul>
       </div>
-    </div>
-
-    <!-- Array of Objects -->
-    <div class="section-card" id="s-array-objects">
-      <div class="section-head" onclick="toggleSection('s-array-objects')">
-        <div class="section-num">06</div>
-        <div class="section-info">
-          <h2>🗃️ Array of Objects</h2>
-          <p>Store multiple objects in an array and iterate over them efficiently.</p>
-        </div>
-        <span class="section-toggle" id="toggle-s-array-objects">▶</span>
+      <div class="log-entry">
+        <span class="log-hash">#1-2</span><span class="log-date">Year 1, Semester 2</span>
+        <h3>B.Sc. in Information &amp; Communication Technology</h3>
+        <ul>
+          <li>Matrix and Linear Algebra</li>
+          <li>Data Structure + Data Structure Lab</li>
+          <li>Electronic Device and Circuit Analysis + Lab</li>
+          <li>English, History, Bhashani Studies</li>
+        </ul>
       </div>
-      <div class="section-body" id="body-s-array-objects">
-        <div class="tags-row">
-          <a class="tag tag-yt" href="https://www.youtube.com/watch?v=xk4_1vDrzzo&t=12608" target="_blank">▶ Bro Code Video</a>
-          <a class="tag tag-gfg" href="https://www.geeksforgeeks.org/array-of-objects-in-java/" target="_blank">📗 GeeksForGeeks</a>
-          <span class="tag tag-level">🟡 Intermediate</span>
-        </div>
-        <div class="video-wrap">
-          <a class="yt-card" href="https://www.youtube.com/watch?v=xk4_1vDrzzo&t=12608" target="_blank" rel="noopener">
-            <img src="https://img.youtube.com/vi/xk4_1vDrzzo/hqdefault.jpg" alt="Java Array of Objects - Bro Code" onerror="this.src='https://img.youtube.com/vi/xk4_1vDrzzo/mqdefault.jpg'"/>
-            <div class="yt-overlay">
-              <div class="yt-play-btn">
-                <svg viewBox="0 0 68 48" width="60" height="42"><path d="M66.5 7.7a8.5 8.5 0 0 0-6-6C56.1 0 34 0 34 0S11.9 0 7.5 1.7a8.5 8.5 0 0 0-6 6C0 12.1 0 24 0 24s0 11.9 1.5 16.3a8.5 8.5 0 0 0 6 6C11.9 48 34 48 34 48s22.1 0 26.5-1.7a8.5 8.5 0 0 0 6-6C68 35.9 68 24 68 24s0-11.9-1.5-16.3z" fill="#ff0000"/><path d="M45 24 27 14v20" fill="#fff"/></svg>
-              </div>
-              <div class="yt-label">Watch on YouTube ↗</div>
-            </div>
-          </a>
-        </div>
-        <div class="key-points">
-          <h4>🔑 Key Concepts</h4>
-          <ul>
-            <li>Declare with <code>ClassName[] arr = new ClassName[size];</code></li>
-            <li>Each element is a reference, not a primitive</li>
-            <li>Uninitialized elements are <code>null</code></li>
-            <li>Use loops to access and modify elements</li>
-          </ul>
-        </div>
+      <div class="log-entry">
+        <span class="log-hash">#1-1</span><span class="log-date">Year 1, Semester 1</span>
+        <h3>B.Sc. in Information &amp; Communication Technology</h3>
+        <ul>
+          <li>Differential and Integral Calculus</li>
+          <li>Physics, Chemistry</li>
+          <li>Computer Programming + Lab</li>
+          <li>EEE + Lab</li>
+        </ul>
       </div>
     </div>
+  </div>
+</section>
 
-    <!-- Static -->
-    <div class="section-card" id="s-static">
-      <div class="section-head" onclick="toggleSection('s-static')">
-        <div class="section-num">07</div>
-        <div class="section-info">
-          <h2>⚡ Static Keyword</h2>
-          <p>Class-level members that belong to the class, not any object instance.</p>
-        </div>
-        <span class="section-toggle" id="toggle-s-static">▶</span>
-      </div>
-      <div class="section-body" id="body-s-static">
-        <div class="tags-row">
-          <a class="tag tag-yt" href="https://www.youtube.com/watch?v=xk4_1vDrzzo&t=13227" target="_blank">▶ Bro Code Video</a>
-          <a class="tag tag-gfg" href="https://www.geeksforgeeks.org/static-keyword-java/" target="_blank">📗 GeeksForGeeks</a>
-          <span class="tag tag-level">🟡 Intermediate</span>
-        </div>
-        <div class="video-wrap">
-          <a class="yt-card" href="https://www.youtube.com/watch?v=xk4_1vDrzzo&t=13227" target="_blank" rel="noopener">
-            <img src="https://img.youtube.com/vi/xk4_1vDrzzo/hqdefault.jpg" alt="Java Static Keyword - Bro Code" onerror="this.src='https://img.youtube.com/vi/xk4_1vDrzzo/mqdefault.jpg'"/>
-            <div class="yt-overlay">
-              <div class="yt-play-btn">
-                <svg viewBox="0 0 68 48" width="60" height="42"><path d="M66.5 7.7a8.5 8.5 0 0 0-6-6C56.1 0 34 0 34 0S11.9 0 7.5 1.7a8.5 8.5 0 0 0-6 6C0 12.1 0 24 0 24s0 11.9 1.5 16.3a8.5 8.5 0 0 0 6 6C11.9 48 34 48 34 48s22.1 0 26.5-1.7a8.5 8.5 0 0 0 6-6C68 35.9 68 24 68 24s0-11.9-1.5-16.3z" fill="#ff0000"/><path d="M45 24 27 14v20" fill="#fff"/></svg>
-              </div>
-              <div class="yt-label">Watch on YouTube ↗</div>
-            </div>
-          </a>
-        </div>
-        <div class="key-points">
-          <h4>🔑 Key Concepts</h4>
-          <ul>
-            <li>Static fields are shared by all instances of a class</li>
-            <li>Static methods can be called without an object: <code>ClassName.method()</code></li>
-            <li>Cannot use <code>this</code> inside a static method</li>
-            <li>Useful for counters, utility methods, constants</li>
-          </ul>
-        </div>
-      </div>
+<section id="contact" class="reveal">
+  <div class="wrap contact-inner">
+    <div class="contact-copy">
+      <h2>Let's talk.</h2>
+      <p>I'm open to internships and junior developer roles. The fastest way to reach me is email — I usually reply within a day or two.</p>
     </div>
+    <ul class="contact-links">
+      <li><a href="mailto:it24059@mbstu.ac.bd">it24059@mbstu.ac.bd</a></li>
+      <li><a href="https://github.com/Tafsir59" target="_blank" rel="noopener">github.com/Tafsir59</a></li>
+    </ul>
+  </div>
+</section>
 
-    <!-- ═══════════════════════════════════════ -->
-    <!-- MODULE 2 — 4 PILLARS -->
-    <!-- ═══════════════════════════════════════ -->
-    <div class="module-divider" id="module-pillars">
-      <div class="label"><span class="dot-big" style="background:#58a6ff;border-radius:50%"></span>Module 2 — The 4 Pillars of OOP</div>
-      <div class="line"></div>
-    </div>
-
-    <!-- Inheritance -->
-    <div class="section-card" id="s-inheritance">
-      <div class="section-head" onclick="toggleSection('s-inheritance')">
-        <div class="section-num">08</div>
-        <div class="section-info">
-          <h2>👨‍👩‍👦 Inheritance</h2>
-          <p>Child classes inherit fields and methods from parent classes — reuse without rewriting.</p>
-        </div>
-        <span class="section-toggle" id="toggle-s-inheritance">▶</span>
-      </div>
-      <div class="section-body" id="body-s-inheritance">
-        <div class="tags-row">
-          <a class="tag tag-yt" href="https://www.youtube.com/watch?v=xk4_1vDrzzo&t=13690" target="_blank">▶ Bro Code Video</a>
-          <a class="tag tag-gfg" href="https://www.geeksforgeeks.org/inheritance-in-java/" target="_blank">📗 GeeksForGeeks</a>
-          <span class="tag tag-level">🔵 Core Pillar</span>
-        </div>
-        <div class="video-wrap">
-          <a class="yt-card" href="https://www.youtube.com/watch?v=xk4_1vDrzzo&t=13690" target="_blank" rel="noopener">
-            <img src="https://img.youtube.com/vi/xk4_1vDrzzo/hqdefault.jpg" alt="Java Inheritance - Bro Code" onerror="this.src='https://img.youtube.com/vi/xk4_1vDrzzo/mqdefault.jpg'"/>
-            <div class="yt-overlay">
-              <div class="yt-play-btn">
-                <svg viewBox="0 0 68 48" width="60" height="42"><path d="M66.5 7.7a8.5 8.5 0 0 0-6-6C56.1 0 34 0 34 0S11.9 0 7.5 1.7a8.5 8.5 0 0 0-6 6C0 12.1 0 24 0 24s0 11.9 1.5 16.3a8.5 8.5 0 0 0 6 6C11.9 48 34 48 34 48s22.1 0 26.5-1.7a8.5 8.5 0 0 0 6-6C68 35.9 68 24 68 24s0-11.9-1.5-16.3z" fill="#ff0000"/><path d="M45 24 27 14v20" fill="#fff"/></svg>
-              </div>
-              <div class="yt-label">Watch on YouTube ↗</div>
-            </div>
-          </a>
-        </div>
-        <div class="key-points">
-          <h4>🔑 Key Concepts</h4>
-          <ul>
-            <li>Use <code>extends</code> keyword to inherit from a parent class</li>
-            <li>Java supports <strong>single inheritance</strong> (one parent class only)</li>
-            <li>Child inherits all non-private members</li>
-            <li>Promotes code reuse and establishes an IS-A relationship</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <!-- Method Overriding -->
-    <div class="section-card" id="s-overriding">
-      <div class="section-head" onclick="toggleSection('s-overriding')">
-        <div class="section-num">09</div>
-        <div class="section-info">
-          <h2>🔄 Method Overriding</h2>
-          <p>Redefine a parent method in the child class to specialize behavior.</p>
-        </div>
-        <span class="section-toggle" id="toggle-s-overriding">▶</span>
-      </div>
-      <div class="section-body" id="body-s-overriding">
-        <div class="tags-row">
-          <a class="tag tag-yt" href="https://www.youtube.com/watch?v=xk4_1vDrzzo&t=14025" target="_blank">▶ Bro Code Video</a>
-          <a class="tag tag-gfg" href="https://www.geeksforgeeks.org/overriding-in-java/" target="_blank">📗 GeeksForGeeks</a>
-          <span class="tag tag-level">🔵 Core Pillar</span>
-        </div>
-        <div class="video-wrap">
-          <a class="yt-card" href="https://www.youtube.com/watch?v=xk4_1vDrzzo&t=14025" target="_blank" rel="noopener">
-            <img src="https://img.youtube.com/vi/xk4_1vDrzzo/hqdefault.jpg" alt="Java Method Overriding - Bro Code" onerror="this.src='https://img.youtube.com/vi/xk4_1vDrzzo/mqdefault.jpg'"/>
-            <div class="yt-overlay">
-              <div class="yt-play-btn">
-                <svg viewBox="0 0 68 48" width="60" height="42"><path d="M66.5 7.7a8.5 8.5 0 0 0-6-6C56.1 0 34 0 34 0S11.9 0 7.5 1.7a8.5 8.5 0 0 0-6 6C0 12.1 0 24 0 24s0 11.9 1.5 16.3a8.5 8.5 0 0 0 6 6C11.9 48 34 48 34 48s22.1 0 26.5-1.7a8.5 8.5 0 0 0 6-6C68 35.9 68 24 68 24s0-11.9-1.5-16.3z" fill="#ff0000"/><path d="M45 24 27 14v20" fill="#fff"/></svg>
-              </div>
-              <div class="yt-label">Watch on YouTube ↗</div>
-            </div>
-          </a>
-        </div>
-        <div class="key-points">
-          <h4>🔑 Key Concepts</h4>
-          <ul>
-            <li>Same method signature as the parent, in the child class</li>
-            <li>Use <code>@Override</code> annotation to catch mistakes at compile time</li>
-            <li>Return type must be same or a subtype (covariant)</li>
-            <li>Access modifier must be same or less restrictive</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <!-- super keyword -->
-    <div class="section-card" id="s-super">
-      <div class="section-head" onclick="toggleSection('s-super')">
-        <div class="section-num">10</div>
-        <div class="section-info">
-          <h2>🦸 super Keyword</h2>
-          <p>Access the parent class's constructor, fields, and methods from the child.</p>
-        </div>
-        <span class="section-toggle" id="toggle-s-super">▶</span>
-      </div>
-      <div class="section-body" id="body-s-super">
-        <div class="tags-row">
-          <a class="tag tag-yt" href="https://www.youtube.com/watch?v=xk4_1vDrzzo&t=14253" target="_blank">▶ Bro Code Video</a>
-          <a class="tag tag-gfg" href="https://www.geeksforgeeks.org/super-keyword/" target="_blank">📗 GeeksForGeeks</a>
-          <span class="tag tag-level">🟡 Intermediate</span>
-        </div>
-        <div class="video-wrap">
-          <a class="yt-card" href="https://www.youtube.com/watch?v=xk4_1vDrzzo&t=14253" target="_blank" rel="noopener">
-            <img src="https://img.youtube.com/vi/xk4_1vDrzzo/hqdefault.jpg" alt="Java super Keyword - Bro Code" onerror="this.src='https://img.youtube.com/vi/xk4_1vDrzzo/mqdefault.jpg'"/>
-            <div class="yt-overlay">
-              <div class="yt-play-btn">
-                <svg viewBox="0 0 68 48" width="60" height="42"><path d="M66.5 7.7a8.5 8.5 0 0 0-6-6C56.1 0 34 0 34 0S11.9 0 7.5 1.7a8.5 8.5 0 0 0-6 6C0 12.1 0 24 0 24s0 11.9 1.5 16.3a8.5 8.5 0 0 0 6 6C11.9 48 34 48 34 48s22.1 0 26.5-1.7a8.5 8.5 0 0 0 6-6C68 35.9 68 24 68 24s0-11.9-1.5-16.3z" fill="#ff0000"/><path d="M45 24 27 14v20" fill="#fff"/></svg>
-              </div>
-              <div class="yt-label">Watch on YouTube ↗</div>
-            </div>
-          </a>
-        </div>
-        <div class="key-points">
-          <h4>🔑 Key Concepts</h4>
-          <ul>
-            <li><code>super()</code> calls the parent class constructor</li>
-            <li><code>super.method()</code> calls the parent's overridden method</li>
-            <li>Must be the first statement in child constructor if used</li>
-            <li>Java automatically calls <code>super()</code> if not explicitly written</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <!-- Abstraction -->
-    <div class="section-card" id="s-abstraction">
-      <div class="section-head" onclick="toggleSection('s-abstraction')">
-        <div class="section-num">11</div>
-        <div class="section-info">
-          <h2>🧩 Abstraction</h2>
-          <p>Hide internal complexity, expose only what's necessary via abstract classes.</p>
-        </div>
-        <span class="section-toggle" id="toggle-s-abstraction">▶</span>
-      </div>
-      <div class="section-body" id="body-s-abstraction">
-        <div class="tags-row">
-          <a class="tag tag-yt" href="https://www.youtube.com/watch?v=xk4_1vDrzzo&t=14706" target="_blank">▶ Bro Code Video</a>
-          <a class="tag tag-gfg" href="https://www.geeksforgeeks.org/abstraction-in-java-2/" target="_blank">📗 GeeksForGeeks</a>
-          <span class="tag tag-level">🔵 Core Pillar</span>
-        </div>
-        <div class="video-wrap">
-          <a class="yt-card" href="https://www.youtube.com/watch?v=xk4_1vDrzzo&t=14706" target="_blank" rel="noopener">
-            <img src="https://img.youtube.com/vi/xk4_1vDrzzo/hqdefault.jpg" alt="Java Abstraction - Bro Code" onerror="this.src='https://img.youtube.com/vi/xk4_1vDrzzo/mqdefault.jpg'"/>
-            <div class="yt-overlay">
-              <div class="yt-play-btn">
-                <svg viewBox="0 0 68 48" width="60" height="42"><path d="M66.5 7.7a8.5 8.5 0 0 0-6-6C56.1 0 34 0 34 0S11.9 0 7.5 1.7a8.5 8.5 0 0 0-6 6C0 12.1 0 24 0 24s0 11.9 1.5 16.3a8.5 8.5 0 0 0 6 6C11.9 48 34 48 34 48s22.1 0 26.5-1.7a8.5 8.5 0 0 0 6-6C68 35.9 68 24 68 24s0-11.9-1.5-16.3z" fill="#ff0000"/><path d="M45 24 27 14v20" fill="#fff"/></svg>
-              </div>
-              <div class="yt-label">Watch on YouTube ↗</div>
-            </div>
-          </a>
-        </div>
-        <div class="key-points">
-          <h4>🔑 Key Concepts</h4>
-          <ul>
-            <li>Abstract classes cannot be instantiated directly</li>
-            <li>Abstract methods have no body — subclasses must implement them</li>
-            <li>Declared with <code>abstract</code> keyword</li>
-            <li>Can have both abstract and concrete methods</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <!-- Access Modifiers -->
-    <div class="section-card" id="s-access">
-      <div class="section-head" onclick="toggleSection('s-access')">
-        <div class="section-num">12</div>
-        <div class="section-info">
-          <h2>🔒 Access Modifiers</h2>
-          <p>Control the visibility of classes, fields, and methods across packages and classes.</p>
-        </div>
-        <span class="section-toggle" id="toggle-s-access">▶</span>
-      </div>
-      <div class="section-body" id="body-s-access">
-        <div class="tags-row">
-          <a class="tag tag-yt" href="https://www.youtube.com/watch?v=xk4_1vDrzzo&t=15001" target="_blank">▶ Bro Code Video</a>
-          <a class="tag tag-gfg" href="https://www.geeksforgeeks.org/access-modifiers-java/" target="_blank">📗 GeeksForGeeks</a>
-          <span class="tag tag-level">🟡 Intermediate</span>
-        </div>
-        <div class="video-wrap">
-          <a class="yt-card" href="https://www.youtube.com/watch?v=xk4_1vDrzzo&t=15001" target="_blank" rel="noopener">
-            <img src="https://img.youtube.com/vi/xk4_1vDrzzo/hqdefault.jpg" alt="Java Access Modifiers - Bro Code" onerror="this.src='https://img.youtube.com/vi/xk4_1vDrzzo/mqdefault.jpg'"/>
-            <div class="yt-overlay">
-              <div class="yt-play-btn">
-                <svg viewBox="0 0 68 48" width="60" height="42"><path d="M66.5 7.7a8.5 8.5 0 0 0-6-6C56.1 0 34 0 34 0S11.9 0 7.5 1.7a8.5 8.5 0 0 0-6 6C0 12.1 0 24 0 24s0 11.9 1.5 16.3a8.5 8.5 0 0 0 6 6C11.9 48 34 48 34 48s22.1 0 26.5-1.7a8.5 8.5 0 0 0 6-6C68 35.9 68 24 68 24s0-11.9-1.5-16.3z" fill="#ff0000"/><path d="M45 24 27 14v20" fill="#fff"/></svg>
-              </div>
-              <div class="yt-label">Watch on YouTube ↗</div>
-            </div>
-          </a>
-        </div>
-        <div class="key-points">
-          <h4>🔑 Key Concepts</h4>
-          <ul>
-            <li><code>public</code> — accessible from anywhere</li>
-            <li><code>private</code> — accessible only within the same class</li>
-            <li><code>protected</code> — accessible within package + subclasses</li>
-            <li><em>(default)</em> — accessible within the same package only</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <!-- Encapsulation -->
-    <div class="section-card" id="s-encapsulation">
-      <div class="section-head" onclick="toggleSection('s-encapsulation')">
-        <div class="section-num">13</div>
-        <div class="section-info">
-          <h2>🛡️ Encapsulation</h2>
-          <p>Bundle data and methods together, and control access through getters &amp; setters.</p>
-        </div>
-        <span class="section-toggle" id="toggle-s-encapsulation">▶</span>
-      </div>
-      <div class="section-body" id="body-s-encapsulation">
-        <div class="tags-row">
-          <a class="tag tag-yt" href="https://www.youtube.com/watch?v=xk4_1vDrzzo&t=15579" target="_blank">▶ Bro Code Video</a>
-          <a class="tag tag-gfg" href="https://www.geeksforgeeks.org/encapsulation-in-java/" target="_blank">📗 GeeksForGeeks</a>
-          <span class="tag tag-level">🔵 Core Pillar</span>
-        </div>
-        <div class="video-wrap">
-          <a class="yt-card" href="https://www.youtube.com/watch?v=xk4_1vDrzzo&t=15579" target="_blank" rel="noopener">
-            <img src="https://img.youtube.com/vi/xk4_1vDrzzo/hqdefault.jpg" alt="Java Encapsulation - Bro Code" onerror="this.src='https://img.youtube.com/vi/xk4_1vDrzzo/mqdefault.jpg'"/>
-            <div class="yt-overlay">
-              <div class="yt-play-btn">
-                <svg viewBox="0 0 68 48" width="60" height="42"><path d="M66.5 7.7a8.5 8.5 0 0 0-6-6C56.1 0 34 0 34 0S11.9 0 7.5 1.7a8.5 8.5 0 0 0-6 6C0 12.1 0 24 0 24s0 11.9 1.5 16.3a8.5 8.5 0 0 0 6 6C11.9 48 34 48 34 48s22.1 0 26.5-1.7a8.5 8.5 0 0 0 6-6C68 35.9 68 24 68 24s0-11.9-1.5-16.3z" fill="#ff0000"/><path d="M45 24 27 14v20" fill="#fff"/></svg>
-              </div>
-              <div class="yt-label">Watch on YouTube ↗</div>
-            </div>
-          </a>
-        </div>
-        <div class="key-points">
-          <h4>🔑 Key Concepts</h4>
-          <ul>
-            <li>Make fields <code>private</code> to prevent direct access</li>
-            <li>Provide <code>getX()</code> and <code>setX()</code> public methods for controlled access</li>
-            <li>Setters can validate input before assigning values</li>
-            <li>Protects data integrity and improves maintainability</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <!-- ═══════════════════════════════════════ -->
-    <!-- MODULE 3 — ADVANCED -->
-    <!-- ═══════════════════════════════════════ -->
-    <div class="module-divider" id="module-advanced">
-      <div class="label"><span class="dot-big" style="background:#3fb950;border-radius:50%"></span>Module 3 — Advanced OOP</div>
-      <div class="line"></div>
-    </div>
-
-    <!-- Copy Objects -->
-    <div class="section-card" id="s-copy">
-      <div class="section-head" onclick="toggleSection('s-copy')">
-        <div class="section-num">14</div>
-        <div class="section-info">
-          <h2>📋 Copy Objects</h2>
-          <p>Understand shallow vs deep copy when duplicating object state.</p>
-        </div>
-        <span class="section-toggle" id="toggle-s-copy">▶</span>
-      </div>
-      <div class="section-body" id="body-s-copy">
-        <div class="tags-row">
-          <a class="tag tag-yt" href="https://www.youtube.com/watch?v=xk4_1vDrzzo&t=16050" target="_blank">▶ Bro Code Video</a>
-          <a class="tag tag-gfg" href="https://www.geeksforgeeks.org/copy-constructor-in-java/" target="_blank">📗 GeeksForGeeks</a>
-          <span class="tag tag-level">🟡 Intermediate</span>
-        </div>
-        <div class="video-wrap">
-          <a class="yt-card" href="https://www.youtube.com/watch?v=xk4_1vDrzzo&t=16050" target="_blank" rel="noopener">
-            <img src="https://img.youtube.com/vi/xk4_1vDrzzo/hqdefault.jpg" alt="Java Copy Objects - Bro Code" onerror="this.src='https://img.youtube.com/vi/xk4_1vDrzzo/mqdefault.jpg'"/>
-            <div class="yt-overlay">
-              <div class="yt-play-btn">
-                <svg viewBox="0 0 68 48" width="60" height="42"><path d="M66.5 7.7a8.5 8.5 0 0 0-6-6C56.1 0 34 0 34 0S11.9 0 7.5 1.7a8.5 8.5 0 0 0-6 6C0 12.1 0 24 0 24s0 11.9 1.5 16.3a8.5 8.5 0 0 0 6 6C11.9 48 34 48 34 48s22.1 0 26.5-1.7a8.5 8.5 0 0 0 6-6C68 35.9 68 24 68 24s0-11.9-1.5-16.3z" fill="#ff0000"/><path d="M45 24 27 14v20" fill="#fff"/></svg>
-              </div>
-              <div class="yt-label">Watch on YouTube ↗</div>
-            </div>
-          </a>
-        </div>
-        <div class="key-points">
-          <h4>🔑 Key Concepts</h4>
-          <ul>
-            <li>Assigning an object variable copies the <em>reference</em>, not the object</li>
-            <li><strong>Shallow copy</strong> — copies the reference to nested objects</li>
-            <li><strong>Deep copy</strong> — recursively copies all nested objects</li>
-            <li>Copy constructors are a clean Java pattern for object duplication</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <!-- Interface -->
-    <div class="section-card" id="s-interface">
-      <div class="section-head" onclick="toggleSection('s-interface')">
-        <div class="section-num">15</div>
-        <div class="section-info">
-          <h2>🔌 Interfaces</h2>
-          <p>Define contracts that classes must follow — achieves multiple type inheritance.</p>
-        </div>
-        <span class="section-toggle" id="toggle-s-interface">▶</span>
-      </div>
-      <div class="section-body" id="body-s-interface">
-        <div class="tags-row">
-          <a class="tag tag-yt" href="https://www.youtube.com/watch?v=xk4_1vDrzzo&t=16443" target="_blank">▶ Bro Code Video</a>
-          <a class="tag tag-gfg" href="https://www.geeksforgeeks.org/interfaces-in-java/" target="_blank">📗 GeeksForGeeks</a>
-          <span class="tag tag-level">🟠 Advanced</span>
-        </div>
-        <div class="video-wrap">
-          <a class="yt-card" href="https://www.youtube.com/watch?v=xk4_1vDrzzo&t=16443" target="_blank" rel="noopener">
-            <img src="https://img.youtube.com/vi/xk4_1vDrzzo/hqdefault.jpg" alt="Java Interfaces - Bro Code" onerror="this.src='https://img.youtube.com/vi/xk4_1vDrzzo/mqdefault.jpg'"/>
-            <div class="yt-overlay">
-              <div class="yt-play-btn">
-                <svg viewBox="0 0 68 48" width="60" height="42"><path d="M66.5 7.7a8.5 8.5 0 0 0-6-6C56.1 0 34 0 34 0S11.9 0 7.5 1.7a8.5 8.5 0 0 0-6 6C0 12.1 0 24 0 24s0 11.9 1.5 16.3a8.5 8.5 0 0 0 6 6C11.9 48 34 48 34 48s22.1 0 26.5-1.7a8.5 8.5 0 0 0 6-6C68 35.9 68 24 68 24s0-11.9-1.5-16.3z" fill="#ff0000"/><path d="M45 24 27 14v20" fill="#fff"/></svg>
-              </div>
-              <div class="yt-label">Watch on YouTube ↗</div>
-            </div>
-          </a>
-        </div>
-        <div class="key-points">
-          <h4>🔑 Key Concepts</h4>
-          <ul>
-            <li>Declared with <code>interface</code> keyword; implemented with <code>implements</code></li>
-            <li>All methods are implicitly <code>public abstract</code> (before Java 8)</li>
-            <li>A class can implement <em>multiple</em> interfaces</li>
-            <li>Interfaces can have <code>default</code> and <code>static</code> methods (Java 8+)</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <!-- Polymorphism -->
-    <div class="section-card" id="s-polymorphism">
-      <div class="section-head" onclick="toggleSection('s-polymorphism')">
-        <div class="section-num">16</div>
-        <div class="section-info">
-          <h2>🎭 Polymorphism</h2>
-          <p>One interface, many forms — compile-time (overloading) and runtime (overriding).</p>
-        </div>
-        <span class="section-toggle" id="toggle-s-polymorphism">▶</span>
-      </div>
-      <div class="section-body" id="body-s-polymorphism">
-        <div class="tags-row">
-          <a class="tag tag-yt" href="https://www.youtube.com/watch?v=xk4_1vDrzzo&t=16879" target="_blank">▶ Bro Code Video</a>
-          <a class="tag tag-gfg" href="https://www.geeksforgeeks.org/polymorphism-in-java/" target="_blank">📗 GeeksForGeeks</a>
-          <span class="tag tag-level">🔵 Core Pillar</span>
-        </div>
-        <div class="video-wrap">
-          <a class="yt-card" href="https://www.youtube.com/watch?v=xk4_1vDrzzo&t=16879" target="_blank" rel="noopener">
-            <img src="https://img.youtube.com/vi/xk4_1vDrzzo/hqdefault.jpg" alt="Java Polymorphism - Bro Code" onerror="this.src='https://img.youtube.com/vi/xk4_1vDrzzo/mqdefault.jpg'"/>
-            <div class="yt-overlay">
-              <div class="yt-play-btn">
-                <svg viewBox="0 0 68 48" width="60" height="42"><path d="M66.5 7.7a8.5 8.5 0 0 0-6-6C56.1 0 34 0 34 0S11.9 0 7.5 1.7a8.5 8.5 0 0 0-6 6C0 12.1 0 24 0 24s0 11.9 1.5 16.3a8.5 8.5 0 0 0 6 6C11.9 48 34 48 34 48s22.1 0 26.5-1.7a8.5 8.5 0 0 0 6-6C68 35.9 68 24 68 24s0-11.9-1.5-16.3z" fill="#ff0000"/><path d="M45 24 27 14v20" fill="#fff"/></svg>
-              </div>
-              <div class="yt-label">Watch on YouTube ↗</div>
-            </div>
-          </a>
-        </div>
-        <div class="key-points">
-          <h4>🔑 Key Concepts</h4>
-          <ul>
-            <li><strong>Compile-time</strong> (static) — method overloading; resolved at compile time</li>
-            <li><strong>Runtime</strong> (dynamic) — method overriding; resolved when program runs</li>
-            <li>A parent reference can hold a child object</li>
-            <li>Enables writing flexible, extensible code</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <!-- Dynamic Polymorphism -->
-    <div class="section-card" id="s-dynamic">
-      <div class="section-head" onclick="toggleSection('s-dynamic')">
-        <div class="section-num">17</div>
-        <div class="section-info">
-          <h2>✨ Dynamic Polymorphism</h2>
-          <p>Runtime dispatch — Java decides which method to call based on the actual object type.</p>
-        </div>
-        <span class="section-toggle" id="toggle-s-dynamic">▶</span>
-      </div>
-      <div class="section-body" id="body-s-dynamic">
-        <div class="tags-row">
-          <a class="tag tag-yt" href="https://www.youtube.com/watch?v=xk4_1vDrzzo&t=17215" target="_blank">▶ Bro Code Video</a>
-          <a class="tag tag-gfg" href="https://www.geeksforgeeks.org/dynamic-method-dispatch-runtime-polymorphism-java/" target="_blank">📗 GeeksForGeeks</a>
-          <span class="tag tag-level">🟠 Advanced</span>
-        </div>
-        <div class="video-wrap">
-          <a class="yt-card" href="https://www.youtube.com/watch?v=xk4_1vDrzzo&t=17215" target="_blank" rel="noopener">
-            <img src="https://img.youtube.com/vi/xk4_1vDrzzo/hqdefault.jpg" alt="Java Dynamic Polymorphism - Bro Code" onerror="this.src='https://img.youtube.com/vi/xk4_1vDrzzo/mqdefault.jpg'"/>
-            <div class="yt-overlay">
-              <div class="yt-play-btn">
-                <svg viewBox="0 0 68 48" width="60" height="42"><path d="M66.5 7.7a8.5 8.5 0 0 0-6-6C56.1 0 34 0 34 0S11.9 0 7.5 1.7a8.5 8.5 0 0 0-6 6C0 12.1 0 24 0 24s0 11.9 1.5 16.3a8.5 8.5 0 0 0 6 6C11.9 48 34 48 34 48s22.1 0 26.5-1.7a8.5 8.5 0 0 0 6-6C68 35.9 68 24 68 24s0-11.9-1.5-16.3z" fill="#ff0000"/><path d="M45 24 27 14v20" fill="#fff"/></svg>
-              </div>
-              <div class="yt-label">Watch on YouTube ↗</div>
-            </div>
-          </a>
-        </div>
-        <div class="key-points">
-          <h4>🔑 Key Concepts</h4>
-          <ul>
-            <li>Also called <em>Dynamic Method Dispatch</em> or late binding</li>
-            <li>A superclass reference variable can reference a subclass object</li>
-            <li>Which overridden method runs is decided at runtime, not compile time</li>
-            <li>Foundation of Java's runtime flexibility and design patterns</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-  </main>
-</div>
-
-<!-- FOOTER -->
 <footer>
-  <div style="display:flex;flex-direction:column;align-items:center;gap:.6rem;">
-    <div style="display:flex;align-items:center;gap:.5rem;font-family:var(--font-mono);font-size:.85rem;color:var(--text);font-weight:600;">
-      <span style="background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Made by Tafsir</span>
-      <span style="color:var(--muted);">·</span>
-      <span style="color:var(--muted);font-size:.78rem;">IT-24059</span>
-    </div>
-    <p style="font-size:.75rem;">Reference by <a href="https://www.geeksforgeeks.org/java/" target="_blank">GeeksForGeeks</a> · Video tutorials via YouTube</p>
-  </div>
+  © 2026 Tafsir Khan. Built with HTML &amp; CSS, hosted on GitHub Pages.
 </footer>
 
 <script>
-  const TOTAL = 15;
-  const opened = new Set();
-
-  function toggleSection(id) {
-    const body = document.getElementById('body-' + id);
-    const toggle = document.getElementById('toggle-' + id);
-    const card = document.getElementById(id);
-    const isOpen = body.classList.contains('show');
-
-    body.classList.toggle('show', !isOpen);
-    toggle.classList.toggle('open', !isOpen);
-    card.classList.toggle('active-section', !isOpen);
-
-    if (!isOpen) {
-      opened.add(id);
-    } else {
-      opened.delete(id);
+  (function(){
+    var els = document.querySelectorAll('.reveal');
+    if(!('IntersectionObserver' in window)){
+      els.forEach(function(el){ el.classList.add('is-visible'); });
+      return;
     }
-    updateProgress();
-    updateSidebar(id, !isOpen);
-  }
-
-  function openSection(id) {
-    const body = document.getElementById('body-' + id);
-    if (!body) return;
-    if (!body.classList.contains('show')) {
-      toggleSection(id);
-    }
-  }
-
-  function updateProgress() {
-    const pct = Math.round((opened.size / TOTAL) * 100);
-    document.getElementById('progressFill').style.width = pct + '%';
-    document.getElementById('progressLabel').textContent = opened.size + ' / ' + TOTAL + ' topics';
-  }
-
-  function updateSidebar(id, isActive) {
-    document.querySelectorAll('.nav-item').forEach(a => {
-      if (a.getAttribute('href') === '#' + id) {
-        a.classList.toggle('active', isActive);
-      }
-    });
-  }
-
-  // Highlight sidebar on scroll
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        const id = e.target.id;
-        document.querySelectorAll('.nav-item').forEach(a => a.classList.remove('active'));
-        const match = document.querySelector(`.nav-item[href="#${id}"]`);
-        if (match) match.classList.add('active');
-      }
-    });
-  }, { threshold: 0.3 });
-
-  document.querySelectorAll('.section-card').forEach(el => observer.observe(el));
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add('is-visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    els.forEach(function(el){ io.observe(el); });
+  })();
 </script>
 
 </body>
