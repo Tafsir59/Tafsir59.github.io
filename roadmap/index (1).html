@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Backend Developer Roadmap Tracker</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: #0e1015;
+    color: #e7e5df;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+  #root { min-height: 100vh; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const { useState, useMemo, useEffect } = React;
+
+const Check = ({ size = 16, color = "#0e1015", strokeWidth = 3 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="20 6 9 17 4 12"></polyline>
+  </svg>
+);
+const Rocket = ({ size = 11, color = "currentColor" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path>
+    <path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path>
+    <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"></path>
+    <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path>
+  </svg>
+);
+const ChevronDown = ({ size = 18, color = "currentColor", style = {} }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={style}>
+    <polyline points="6 9 12 15 18 9"></polyline>
+  </svg>
+);
+const RotateCcw = ({ size = 12 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="1 4 1 10 7 10"></polyline>
+    <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+  </svg>
+);
+
+const PHASES = [
+  { id: "p1", weeks: "Weeks 1–4", title: "Java Foundations", project: null,
+    tasks: [
+      "Java syntax, primitive vs reference types",
+      "OOP: encapsulation, inheritance, polymorphism, abstraction",
+      "Collections: ArrayList, HashMap, HashSet, Comparator/Comparable",
+      "Exception handling & custom exceptions",
+      "Generics: classes, methods, bounded types",
+      "Modern Java: Streams, Lambdas, Optional",
+      "Daily practice: small coding problems (arrays, strings, collections)",
+    ]},
+  { id: "p2", weeks: "Weeks 5–6", title: "SQL + JDBC", project: null,
+    tasks: [
+      "SQL fundamentals: SELECT, WHERE, GROUP BY, HAVING",
+      "Master all JOIN types (INNER, LEFT, RIGHT, SELF, CROSS)",
+      "Database design: keys, normalization, relationships",
+      "JDBC: Connection, PreparedStatement, ResultSet",
+      "Write 30–40 practice SQL queries on a sample DB",
+      "Build a small JDBC console app (e.g. CLI todo list on Postgres)",
+    ]},
+  { id: "p3", weeks: "Weeks 7–9", title: "Spring Core + Spring Boot + REST",
+    project: { name: "Project 1: Student/Course Management API", note: "Start core CRUD — Students, Courses, Enrollments. Keep it simple." },
+    tasks: [
+      "IoC, Dependency Injection, Beans, ApplicationContext",
+      "Spring Boot project structure & application.properties",
+      "REST basics: @RestController, @GetMapping, @RequestBody",
+      "HTTP methods & status codes",
+      "🚀 Build Students CRUD endpoints",
+      "🚀 Build Courses CRUD endpoints",
+      "🚀 Build Enrollments CRUD endpoints",
+    ]},
+  { id: "p4", weeks: "Weeks 10–12", title: "JPA/Hibernate + Architecture",
+    project: { name: "Project 1: finish & polish", note: "Refactor into layers, add docs — this makes it portfolio-ready." },
+    tasks: [
+      "@Entity, relationships (@OneToMany, @ManyToOne, @ManyToMany)",
+      "Lazy vs eager loading, cascade, N+1 problem",
+      "JPQL & native queries",
+      "🚀 Refactor into Controller → Service → Repository → DTO",
+      "🚀 Add pagination & sorting to list endpoints",
+      "🚀 Add global exception handling (@ControllerAdvice)",
+      "🚀 Add Swagger / OpenAPI docs",
+      "🚀 Write README, push to GitHub, deploy if possible",
+    ]},
+  { id: "p5", weeks: "Weeks 13–14", title: "Testing + Git",
+    project: { name: "Apply to Project 1", note: "Untested projects are a red flag — don't skip this." },
+    tasks: [
+      "JUnit & Mockito fundamentals",
+      "Unit testing vs integration testing",
+      "@SpringBootTest & MockMvc",
+      "Git branching, PRs, .gitignore",
+      "🚀 Write 15–20 tests covering Project 1",
+    ]},
+  { id: "p6", weeks: "Weeks 15–17", title: "Spring Security + JWT",
+    project: { name: "Project 2: Auth Service with JWT", note: "Standalone microservice — smaller and more focused than Project 1." },
+    tasks: [
+      "Authentication vs authorization",
+      "Password hashing with BCrypt",
+      "Filters & security context",
+      "JWT, refresh tokens, role-based access control",
+      "🚀 Build register / login / refresh token flow",
+      "🚀 Add RBAC (USER / ADMIN)",
+      "🚀 Add rate limiting on login attempts",
+    ]},
+  { id: "p7", weeks: "Weeks 18–19", title: "Docker",
+    project: { name: "Apply to Projects 1 & 2", note: "Huge portfolio signal — most junior candidates skip this." },
+    tasks: [
+      "Images, containers, Dockerfile basics",
+      "Volumes, networks, ports, env variables",
+      "Docker Compose fundamentals",
+      "🚀 Dockerize Project 1 (Spring Boot + Postgres)",
+      "🚀 Dockerize Project 2",
+    ]},
+  { id: "p8", weeks: "Weeks 20–25", title: "E-commerce Backend (Flagship)",
+    project: { name: "Project 3: E-commerce Backend", note: "Your headline project — take extra time to polish this one." },
+    tasks: [
+      "Redis basics for caching",
+      "🚀 Core entities: Users, Products, Categories, Cart, Orders",
+      "🚀 Order state machine (PENDING → PAID → SHIPPED → DELIVERED)",
+      "🚀 Admin endpoints (inventory, order status updates)",
+      "🚀 Search/filter products with pagination",
+      "🚀 Dockerize with Spring Boot + Postgres + Redis",
+      "🚀 Deploy to Render / Railway / AWS free tier",
+    ]},
+  { id: "p9", weeks: "Weeks 26–29", title: "Python + FastAPI",
+    project: { name: "Project 4: FastAPI Twin Project", note: "Rebuild a CRUD service in Python — proves polyglot competence." },
+    tasks: [
+      "Python fundamentals & OOP",
+      "async/await, decorators, type hints",
+      "FastAPI: routes, Pydantic, dependency injection",
+      "🚀 Rebuild a CRUD app with FastAPI + SQLAlchemy + Pydantic",
+      "🚀 Add async endpoints + one background task",
+    ]},
+  { id: "p10", weeks: "Weeks 30–33", title: "AI Integration (Differentiator)",
+    project: { name: "Project 5: AI-Integrated Backend", note: "Pick one: resume matcher, ticket classifier, or content moderator." },
+    tasks: [
+      "Basic ML/embedding concepts (enough to call a model)",
+      "Service-to-service communication (Spring Boot ↔ FastAPI)",
+      "🚀 Build the FastAPI AI microservice",
+      "🚀 Build Spring Boot orchestration layer",
+      "🚀 Document architecture diagram & deploy both services",
+    ]},
+  { id: "p11", weeks: "Weeks 34–36", title: "Polish + Job Prep", project: null,
+    tasks: [
+      "Write proper READMEs for all 5 projects (diagram + screenshots)",
+      "Pin best 3 repos on GitHub, clean commit histories",
+      "Post 2–3 LinkedIn posts about specific technical challenges",
+      "Light System Design reading (for interview conversations)",
+      "Begin applying to jobs",
+    ]},
+];
+
+const TOTAL_TASKS = PHASES.reduce((sum, p) => sum + p.tasks.length, 0);
+const STORAGE_KEY = "backend-roadmap-progress-v1";
+
+function RoadmapChecklist() {
+  const [checked, setChecked] = useState(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      return saved ? JSON.parse(saved) : {};
+    } catch (e) {
+      return {};
+    }
+  });
+  const [openPhase, setOpenPhase] = useState("p1");
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(checked));
+    } catch (e) {}
+  }, [checked]);
+
+  const toggle = (phaseId, idx) => {
+    const key = `${phaseId}-${idx}`;
+    setChecked((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  const phaseProgress = (phase) => {
+    const done = phase.tasks.filter((_, i) => checked[`${phase.id}-${i}`]).length;
+    return { done, total: phase.tasks.length };
+  };
+
+  const totalDone = useMemo(() => Object.values(checked).filter(Boolean).length, [checked]);
+  const pct = Math.round((totalDone / TOTAL_TASKS) * 100);
+  const reset = () => {
+    if (window.confirm("Reset all progress? This can't be undone.")) setChecked({});
+  };
+
+  const vars = {
+    "--bg": "#0e1015", "--panel": "#171a21", "--panel-alt": "#1d212a",
+    "--border": "#2a2f3a", "--text": "#e7e5df", "--text-dim": "#8b9099",
+    "--amber": "#e6a23c", "--teal": "#5ea8a0",
+    "--mono": "'JetBrains Mono', 'SF Mono', 'Fira Code', ui-monospace, monospace",
+  };
+
+  return (
+    <div style={{ ...vars, background: "var(--bg)", color: "var(--text)", minHeight: "100vh", padding: "28px 16px 60px" }}>
+      <div style={{ maxWidth: 720, margin: "0 auto" }}>
+        <div style={{ marginBottom: 28 }}>
+          <div style={{ fontFamily: "var(--mono)", fontSize: 12, color: "var(--teal)", letterSpacing: 1, marginBottom: 6 }}>
+            ~/backend-developer-roadmap
+          </div>
+          <h1 style={{ fontFamily: "var(--mono)", fontSize: 22, fontWeight: 700, margin: 0 }}>
+            Java + Python Backend Roadmap
+          </h1>
+
+          <div style={{ marginTop: 18 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", fontFamily: "var(--mono)", fontSize: 12, color: "var(--text-dim)", marginBottom: 6 }}>
+              <span>progress: {totalDone}/{TOTAL_TASKS} tasks</span>
+              <span style={{ color: "var(--amber)" }}>{pct}%</span>
+            </div>
+            <div style={{ height: 8, background: "var(--panel)", border: "1px solid var(--border)", borderRadius: 4, overflow: "hidden" }}>
+              <div style={{ height: "100%", width: `${pct}%`, background: "linear-gradient(90deg, var(--teal), var(--amber))", transition: "width 0.4s ease" }} />
+            </div>
+          </div>
+
+          <button onClick={reset} style={{ marginTop: 14, display: "inline-flex", alignItems: "center", gap: 6, background: "transparent", border: "1px solid var(--border)", color: "var(--text-dim)", fontFamily: "var(--mono)", fontSize: 11, padding: "6px 10px", borderRadius: 5, cursor: "pointer" }}>
+            <RotateCcw size={12} /> reset progress
+          </button>
+        </div>
+
+        <div style={{ position: "relative" }}>
+          <div style={{ position: "absolute", left: 15, top: 14, bottom: 14, width: 2, background: "var(--border)" }} />
+          {PHASES.map((phase) => {
+            const { done, total } = phaseProgress(phase);
+            const isOpen = openPhase === phase.id;
+            const complete = done === total;
+            return (
+              <div key={phase.id} style={{ position: "relative", marginBottom: 10 }}>
+                <div onClick={() => setOpenPhase(isOpen ? null : phase.id)}
+                  style={{ display: "flex", alignItems: "center", gap: 14, cursor: "pointer", background: "var(--panel)", border: `1px solid ${isOpen ? "var(--teal)" : "var(--border)"}`, borderRadius: 8, padding: "12px 14px" }}>
+                  <div style={{ zIndex: 1, width: 30, height: 30, flexShrink: 0, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: complete ? "var(--teal)" : "var(--panel-alt)", border: `2px solid ${complete ? "var(--teal)" : "var(--border)"}` }}>
+                    {complete ? <Check size={16} /> : <span style={{ fontFamily: "var(--mono)", fontSize: 11, color: "var(--text-dim)" }}>{done}/{total}</span>}
+                  </div>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontFamily: "var(--mono)", fontSize: 10, color: "var(--text-dim)", marginBottom: 2 }}>{phase.weeks}</div>
+                    <div style={{ fontSize: 15, fontWeight: 600 }}>{phase.title}</div>
+                    {phase.project && (
+                      <div style={{ marginTop: 4, display: "inline-flex", alignItems: "center", gap: 5, fontSize: 11, fontFamily: "var(--mono)", color: "var(--amber)" }}>
+                        <Rocket size={11} /> {phase.project.name}
+                      </div>
+                    )}
+                  </div>
+                  <ChevronDown size={18} color="var(--text-dim)" style={{ transform: isOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s ease", flexShrink: 0 }} />
+                </div>
+
+                {isOpen && (
+                  <div style={{ marginLeft: 30, marginTop: 6, marginBottom: 6, background: "var(--panel-alt)", border: "1px solid var(--border)", borderRadius: 8, padding: "10px 14px" }}>
+                    {phase.project && (
+                      <div style={{ fontSize: 12, color: "var(--text-dim)", marginBottom: 10, paddingBottom: 10, borderBottom: "1px dashed var(--border)" }}>
+                        {phase.project.note}
+                      </div>
+                    )}
+                    {phase.tasks.map((task, idx) => {
+                      const key = `${phase.id}-${idx}`;
+                      const isChecked = !!checked[key];
+                      const isProject = task.startsWith("🚀");
+                      return (
+                        <label key={key} style={{ display: "flex", alignItems: "flex-start", gap: 10, padding: "6px 0", cursor: "pointer" }}>
+                          <div onClick={() => toggle(phase.id, idx)} style={{ flexShrink: 0, marginTop: 2, width: 16, height: 16, borderRadius: 4, border: `1.5px solid ${isChecked ? "var(--teal)" : "var(--border)"}`, background: isChecked ? "var(--teal)" : "transparent", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                            {isChecked && <Check size={11} />}
+                          </div>
+                          <span onClick={() => toggle(phase.id, idx)} style={{ fontSize: 13.5, lineHeight: 1.4, color: isChecked ? "var(--text-dim)" : "var(--text)", textDecoration: isChecked ? "line-through" : "none", fontWeight: isProject ? 600 : 400 }}>
+                            {task.replace("🚀 ", "")}
+                          </span>
+                        </label>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        <div style={{ marginTop: 24, fontFamily: "var(--mono)", fontSize: 11, color: "var(--text-dim)", textAlign: "center" }}>
+          progress is saved automatically in this browser 💾
+        </div>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<RoadmapChecklist />);
+</script>
+</body>
+</html>
